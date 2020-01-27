@@ -7,6 +7,7 @@ from matplotlib import pyplot as plt
 
 
 class kmeans_new:
+
     def load_data(self, file_path):
         f = open(file_path, "rb")  # 以二进制的方式打开图像文件
         data = []
@@ -221,4 +222,3 @@ plt.subplot(2, 2, 4)
 plt.title("Kmeans Clustering")
 plt.imshow(clusterData / int(k), cmap="gray")
 plt.show()
-
