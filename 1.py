@@ -35,16 +35,32 @@ def gauss_kernel(kernel_size=3, sigma=0):
     return np.multiply(kx, np.transpose(ky))
 
 
+# 高斯滤波
+def gauss(img, k):
+    h = img.shape[0]
+    w = img.shape[1]
+    img1 = np.zeros((h, w), np.uint8)
+    kernel = gauss_kernel(k, 1)  # 计算高斯卷积核
+    for i in range(1, h - 1):
+        for j in range(1, w - 1):
+            sum = 0
+            for k in range(-1, 2):
+                for l in range(-1, 2):
+                    sum += img[i + k, j + l] * kernel[k + 1, l + 1]  # 高斯滤波
+            img1[i, j] = sum
+    return img1
+
+
 def img_process(k):
     img = cv2.imread('a.jpg', 0)
-    img_blur = cv2.GaussianBlur(img, (k, k), 0)
-    # 增加加性高斯白噪声
+    img_blur = gauss(img, k)
+    # 增加高斯白噪声
     img_gwn = gaussian_noise(img_blur, 0, 10)
     return img_blur, img_gwn, img
 
 
 if __name__ == '__main__':
-    k = 7
+    k = 3
     img_add_blur, img_add_blur_and_gwn, img = img_process(k)
     img_fft = np.fft.fft2(img)
     img_add_blur_fft = np.fft.fft2(img_add_blur)
